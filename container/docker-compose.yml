@@ -1,10 +1,9 @@
-
 services:
   foundry:
     image: manifoldfinance/foundry
     container_name: foundry
-#    command:
-#      - '--config.file=/etc/foundry/foundry.yml'
+    #    command:
+    #      - '--config.file=/etc/foundry/foundry.yml'
     ports:
       - 9090:9090
     restart: unless-stopped

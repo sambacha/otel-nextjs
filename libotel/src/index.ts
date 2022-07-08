@@ -2,30 +2,25 @@ import {
   BasicTracerProvider,
   SimpleSpanProcessor,
   Tracer as otTracer,
-} from "@opentelemetry/tracing";
-import { ZipkinExporter } from "@opentelemetry/exporter-zipkin";
-import { WebTracerProvider } from "@opentelemetry/web";
-import * as api from "@opentelemetry/api";
-import inspect from "browser-util-inspect";
+} from '@opentelemetry/tracing';
+import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
+import { WebTracerProvider } from '@opentelemetry/web';
+import * as api from '@opentelemetry/api';
+import inspect from 'browser-util-inspect';
 
 type MaybeAsync<T> = Promise<T> | T;
 
-const isPromise = <T extends unknown>(
-  test?: MaybeAsync<T>
-): test is Promise<T> =>
-  !!test && typeof (test as Promise<T>).then === "function";
+const isPromise = <T extends unknown>(test?: MaybeAsync<T>): test is Promise<T> =>
+  !!test && typeof (test as Promise<T>).then === 'function';
 
 export class Tracer {
   public static traceEnabled = false;
 
   private static _tracer: otTracer;
-  private static _provider:
-    | WebTracerProvider
-    | BasicTracerProvider
-    | null = null;
+  private static _provider: WebTracerProvider | BasicTracerProvider | null = null;
   private static _spans: Array<api.Span> = [];
 
-  static enableTracing(tracerName: string, serviceName = "Polywrap"): void {
+  static enableTracing(tracerName: string, serviceName = 'Polywrap'): void {
     this.traceEnabled = true;
     this._initProvider(serviceName);
 
@@ -46,11 +41,8 @@ export class Tracer {
       spanName,
       {},
       currentSpan
-        ? api.trace.setSpanContext(
-            api.context.active(),
-            currentSpan.spanContext()
-          )
-        : undefined
+        ? api.trace.setSpanContext(api.context.active(), currentSpan.spanContext())
+        : undefined,
     );
     this._pushSpan(span);
   }
@@ -103,7 +95,7 @@ export class Tracer {
     return function (
       target: unknown,
       key: string | symbol,
-      descriptor: PropertyDescriptor
+      descriptor: PropertyDescriptor,
     ): PropertyDescriptor {
       const original = descriptor.value;
 
@@ -112,18 +104,18 @@ export class Tracer {
       ): TReturn {
         try {
           Tracer.startSpan(span);
-          Tracer.setAttribute("args", { ...args });
+          Tracer.setAttribute('args', { ...args });
 
           const result = original.apply(this, args);
 
           if (isPromise(result)) {
-            return (result.then((result) => {
-              Tracer.setAttribute("output", result);
+            return result.then((result) => {
+              Tracer.setAttribute('output', result);
               Tracer.endSpan();
               return result;
-            }) as unknown) as TReturn;
+            }) as unknown as TReturn;
           } else {
-            Tracer.setAttribute("output", result);
+            Tracer.setAttribute('output', result);
             Tracer.endSpan();
             return result;
           }
@@ -140,23 +132,23 @@ export class Tracer {
 
   static traceFunc<TArgs extends Array<unknown>, TReturn>(
     span: string,
-    func: (...args: TArgs) => TReturn
+    func: (...args: TArgs) => TReturn,
   ) {
     return (...args: TArgs): TReturn => {
       try {
         this.startSpan(span);
-        this.setAttribute("args", { ...args });
+        this.setAttribute('args', { ...args });
 
         const result = func(...args);
 
         if (isPromise(result)) {
-          return (result.then((result) => {
-            this.setAttribute("output", result);
+          return result.then((result) => {
+            this.setAttribute('output', result);
             this.endSpan();
             return result;
-          }) as unknown) as TReturn;
+          }) as unknown as TReturn;
         } else {
-          this.setAttribute("output", result);
+          this.setAttribute('output', result);
           this.endSpan();
           return result;
         }
@@ -171,7 +163,7 @@ export class Tracer {
   static _initProvider(serviceName: string): void {
     if (this._provider) return;
 
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       this._provider = new BasicTracerProvider();
     } else {
       this._provider = new WebTracerProvider();
@@ -182,8 +174,8 @@ export class Tracer {
       new SimpleSpanProcessor(
         new ZipkinExporter({
           serviceName: serviceName,
-        })
-      )
+        }),
+      ),
     );
 
     this._provider.register();

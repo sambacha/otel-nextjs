@@ -1,9 +1,8 @@
 module.exports = {
   distDir: 'build',
-   experimental: {
-    outputFileTracing: true
+  experimental: {
+    outputFileTracing: true,
   },
-    optimizeImages: true,
-    optimizeCss: true,
-}
- 
+  optimizeImages: true,
+  optimizeCss: true,
+};

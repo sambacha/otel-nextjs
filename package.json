@@ -23,5 +23,8 @@
     "@opentelemetry/tracing": "^0.24.0",
     "@opentelemetry/web": "^0.24.0",
     "browser-util-inspect": "^0.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
   }
 }
