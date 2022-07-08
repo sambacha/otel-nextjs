@@ -1,0 +1,21 @@
+
+services:
+  foundry:
+    image: manifoldfinance/foundry
+    container_name: foundry
+#    command:
+#      - '--config.file=/etc/foundry/foundry.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    networks:
+      - overlay
+    deploy:
+      endpoint_mode: vip
+    volumes:
+      - ./foundry:/etc/foundry
+      - forge_data:/foundry
+    environment:
+      ETH_RPC_URL: development
+      DAPP_SOLC_VERSION: 0.8.10
+      DAPP_TEST_VERBOSITY: 1

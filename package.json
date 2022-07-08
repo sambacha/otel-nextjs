@@ -1,0 +1,27 @@
+{
+  "name": "sambacha-containers-master-nextjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "next.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sambacha/otel-nextjs.git"
+  },
+  "keywords": [],
+  "author": "sam bacha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sambacha/otel-nextjs/issues"
+  },
+  "homepage": "https://github.com/sambacha/otel-nextjs#readme",
+  "dependencies": {
+    "@opentelemetry/api": "^1.1.0",
+    "@opentelemetry/exporter-zipkin": "^1.4.0",
+    "@opentelemetry/tracing": "^0.24.0",
+    "@opentelemetry/web": "^0.24.0",
+    "browser-util-inspect": "^0.2.0"
+  }
+}
